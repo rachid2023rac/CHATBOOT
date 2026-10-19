@@ -22,7 +22,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Avertissement prototype pédagogique obligatoire (selon le barème Lkhibra Academy)
+# Avertissement prototype pédagogique obligatoire
 st.markdown(
     """
     <div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px; border: 1px solid #ffeeba;">
@@ -35,7 +35,7 @@ st.markdown(
 st.title("🏥 Assistant - Hôpital Universitaire International Mohammed VI")
 st.markdown("Posez vos questions sur les services, spécialités, horaires et démarches pratiques de l'hôpital.")
 
-# 3. Base de connaissances structurée intégrée directement (solution infaillible sur le Cloud)
+# 3. Base de connaissances structurée
 KB_DATA = {
     "system_instructions": [
         "You are an unofficial educational prototype, not an employee or authorised representative of the company.",
@@ -120,8 +120,7 @@ if not api_key:
 # 4. Initialisation du client Gemini (SDK google-genai)
 try:
     client = genai.Client(api_key=api_key)
- #   MODEL_ID = "gemini-2.5-flash"
-     MODEL_ID = "gemini-3.8-flash"
+    MODEL_ID = "gemini-2.5-flash"
 except Exception as e:
     st.error(f"❌ Erreur lors de l'initialisation du client Gemini : {e}")
     st.stop()
