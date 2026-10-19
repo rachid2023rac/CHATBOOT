@@ -17,8 +17,8 @@ if not api_key:
 
 # 2. Configuration de la page Streamlit
 st.set_page_config(
-    page_title="Assistant HUIM6 - Lkhibra Academy",
-    page_icon="🏥",
+    page_title="Assistant Coworking - Wavestart",
+    page_icon="💻",
     layout="centered"
 )
 
@@ -32,83 +32,22 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("🏥 Assistant - Hôpital Universitaire International Mohammed VI")
-st.markdown("Posez vos questions sur les services, spécialités, horaires et démarches pratiques de l'hôpital.")
+st.title("💻 Assistant - Wavestart Coworking Space")
+st.markdown("Posez vos questions sur nos espaces, nos tarifs, les horaires et nos services.")
 
-# 3. Base de connaissances structurée
+# 3. Base de connaissances structurée pour le Coworking
 KB_DATA = {
     "system_instructions": [
-        "You are an unofficial educational prototype, not an employee or authorised representative of the company.",
-        "Respond in clear French for the user interaction while respecting company facts."
+        "Tu es l'assistant virtuel d'un espace de coworking. Réponds en français clair.",
+        "Utilise uniquement les faits de la base de connaissances. N'invente aucun tarif ou horaire.",
+        "Si une information est absente, dis-le clairement et invite à contacter l'accueil."
     ],
     "knowledge": [
-        {"id": "identity", "category": "identity", "fact": "HUIM6 is a private, non-profit hospital."},
-        {"id": "university", "category": "identity", "fact": "It belongs to an ecosystem centred on Université Mohammed VI des Sciences et de la Santé."},
-        {"id": "values", "category": "identity", "fact": "The hospital lists excellence, ethics, empathy, innovation and commitment among its values."},
-        {"id": "published_capacity", "category": "identity", "fact": "The about page states 325 beds and places; this is capacity, not live bed availability."},
-        {"id": "address", "category": "contact", "fact": "Address: Route P 3011, Bouskoura, Morocco."},
-        {"id": "appointment_phone", "category": "contact", "fact": "Appointments: +212 5 29 09 11 11."},
-        {"id": "information_phone", "category": "contact", "fact": "General information: +212 5 29 09 22 22."},
-        {"id": "emergency_phone", "category": "contact", "fact": "Hospital emergency contact: +212 5 29 09 33 33; this is not a national emergency number."},
-        {"id": "administration_phone", "category": "contact", "fact": "Administration: +212 5 29 09 44 44."},
-        {"id": "consult_weekdays", "category": "hours", "fact": "The homepage lists consultations Monday-Friday, 08:30-18:00."},
-        {"id": "consult_saturday", "category": "hours", "fact": "The homepage lists Saturday consultations, 08:30-12:30."},
-        {"id": "emergency_hours", "category": "hours", "fact": "Adult and paediatric emergency services are listed as operating 24/7."},
-        {"id": "appointment_inperson", "category": "patient_services", "fact": "Consultation appointments can be requested in person at the consultation service."},
-        {"id": "appointment_web", "category": "patient_services", "fact": "The FAQ describes an appointment request form on the hospital website."},
-        {"id": "doctor_directory", "category": "patient_services", "fact": "Use the website specialty pages or switchboard for the doctor directory."},
-        {"id": "doctor_choice", "category": "patient_services", "fact": "Advance appointment requests can specify a doctor; availability is not guaranteed."},
-        {"id": "doctor_substitute", "category": "patient_services", "fact": "Emergencies or exceptional circumstances may require a different doctor."},
-        {"id": "cafe", "category": "patient_services", "fact": "A cafeteria is described on the medical hall’s ground floor."},
-        {"id": "shop", "category": "patient_services", "fact": "The FAQ describes a ground-floor shop for groceries, drinks and hygiene items."},
-        {"id": "room_types", "category": "patient_services", "fact": "The FAQ describes individual rooms, double rooms and suites."},
-        {"id": "room_amenities", "category": "patient_services", "fact": "Listed room amenities include television, Wi-Fi and air conditioning."},
-        {"id": "records_request", "category": "patient_services", "fact": "Medical-record copies require a signed written request and identity evidence through the hospital."},
-        {"id": "records_destination", "category": "patient_services", "fact": "Requests go to the Direction de l’Information Médicale; never upload records to this chatbot."},
-        {"id": "billing_office", "category": "patient_services", "fact": "The Bureau des Admissions et Facturation handles admission administration and stay charges."},
-        {"id": "welcome_booklet", "category": "patient_services", "fact": "A welcome booklet is provided for an inpatient stay."},
-        {"id": "accessible_parking", "category": "patient_services", "fact": "The FAQ describes dedicated parking spaces for reduced-mobility visitors."},
-        {"id": "lost_property", "category": "patient_services", "fact": "Lost property can be reported to the hospital’s régie."},
-        {"id": "preadmission", "category": "admission", "fact": "Scheduled hospitalisation or surgery requires pre-admission at the admissions office."},
-        {"id": "estimate", "category": "admission", "fact": "An estimate can be requested before admission; the final amount may change."},
-        {"id": "id_document", "category": "admission", "fact": "The published admission list includes a copy of the patient’s CIN."},
-        {"id": "doctor_order", "category": "admission", "fact": "A doctor’s prescription or hospitalisation letter is listed for admission."},
-        {"id": "insurance_documents", "category": "admission", "fact": "Insurance or mutual-insurance documents may be required for coverage processing."},
-        {"id": "minor_documents", "category": "admission", "fact": "A minor must be accompanied by a parent/legal guardian with supporting identity/family documents."},
-        {"id": "medical_documents", "category": "admission", "fact": "Bring the medical documents requested by the hospital; never send them through this prototype."},
-        {"id": "insurance_named", "category": "admission", "fact": "The page names CNOPS, CNSS and private insurers; individual approval must be confirmed."},
-        {"id": "linen", "category": "admission", "fact": "The page describes hospital-provided pyjamas and bed linen."},
-        {"id": "laundry", "category": "admission", "fact": "Laundry service is described as paid and added to the bill."},
-        {"id": "international_unit", "category": "international_support", "fact": "A dedicated international unit supports international patients."},
-        {"id": "international_plan", "category": "international_support", "fact": "The unit can help plan consultations and care."},
-        {"id": "international_estimate", "category": "international_support", "fact": "The unit can prepare and update estimated care costs."},
-        {"id": "international_transfer", "category": "international_support", "fact": "Airport/station reception and transfer arrangements can be discussed with the unit."},
-        {"id": "international_lodging", "category": "international_support", "fact": "The unit describes help arranging hotels, apartments and car hire."},
-        {"id": "international_language", "category": "international_support", "fact": "Interpreter assistance is described among international-patient services."},
-        {"id": "international_admin", "category": "international_support", "fact": "The unit assists with administrative and financial formalities."},
-        {"id": "international_departure", "category": "international_support", "fact": "Departure support can include reports, return arrangements and follow-up planning."},
-        {"id": "obstetrics", "category": "listed_specialties", "fact": "The women/mother/child unit lists gynaecology and obstetrics."},
-        {"id": "neonatology", "category": "listed_specialties", "fact": "The unit lists neonatology."},
-        {"id": "paediatrics", "category": "listed_specialties", "fact": "The unit lists paediatrics."},
-        {"id": "paediatric_icu", "category": "listed_specialties", "fact": "The unit lists paediatric intensive care."},
-        {"id": "paediatric_surgery", "category": "listed_specialties", "fact": "The unit lists paediatric surgery."},
-        {"id": "neurosurgery", "category": "listed_specialties", "fact": "The head-and-neck unit lists neurosurgery."},
-        {"id": "ent", "category": "listed_specialties", "fact": "The unit lists ENT and cervicofacial surgery."},
-        {"id": "maxillofacial", "category": "listed_specialties", "fact": "The unit lists maxillofacial surgery."},
-        {"id": "ophthalmology", "category": "listed_specialties", "fact": "The unit lists ophthalmology."},
-        {"id": "anaesthesia", "category": "listed_specialties", "fact": "The medical-specialties page lists anaesthesia and intensive care."},
-        {"id": "cardiology", "category": "listed_specialties", "fact": "The page lists cardiology."},
-        {"id": "dental", "category": "listed_specialties", "fact": "Dental care includes orthodontics and paediatric dentistry."},
-        {"id": "dermatology", "category": "listed_specialties", "fact": "The page lists dermatology."},
-        {"id": "endocrinology", "category": "listed_specialties", "fact": "The page lists endocrinology and diabetology."},
-        {"id": "general_surgery", "category": "listed_specialties", "fact": "The surgical specialties page lists general surgery."},
-        {"id": "gyn_surgery", "category": "listed_specialties", "fact": "The page lists gynaecological surgery."},
-        {"id": "eye_surgery", "category": "listed_specialties", "fact": "The page lists eye surgery."},
-        {"id": "skin_surgery", "category": "listed_specialties", "fact": "The page lists dermatological surgery."},
-        {"id": "imaging", "category": "imaging_and_laboratory", "fact": "Imaging services include MRI, CT, ultrasound/Doppler and conventional radiology."},
-        {"id": "mammography", "category": "imaging_and_laboratory", "fact": "The imaging page also lists mammography and dental panoramic imaging."},
-        {"id": "lab_disciplines", "category": "imaging_and_laboratory", "fact": "Laboratory disciplines include biochemistry, haematology, bacteriology, pathology and immunology."},
-        {"id": "exam_preparation", "category": "imaging_and_laboratory", "fact": "Some tests require preparation; contact the laboratory for instructions specific to the prescribed test."}
+        {"id": "address", "category": "contact", "fact": "Adresse : Boulevard Mohammed V, Casablanca, Maroc."},
+        {"id": "contact_phone", "category": "contact", "fact": "Téléphone de l'accueil : +212 5 22 00 11 22."},
+        {"id": "opening_hours", "category": "hours", "fact": "L'espace est ouvert du lundi au vendredi de 08:00 à 20:00, et le samedi de 09:00 à 15:00."},
+        {"id": "wifi_speed", "category": "services", "fact": "Un réseau Wi-Fi haut débit fibre optique est inclus pour tous les résidents et nomades."},
+        {"id": "pricing_nomad", "category": "pricing", "fact": "Le pass journalier (Open Space) est listé à 150 MAD par jour."}
     ]
 }
 
@@ -117,7 +56,7 @@ if not api_key:
     st.error("❌ Erreur : La clé `GEMINI_API_KEY` est introuvable. Configurez-la dans vos secrets Streamlit Cloud ou dans un fichier `.env`.")
     st.stop()
 
-# 4. Initialisation du client Gemini (SDK google-genai) avec le modèle requis
+# 4. Initialisation du client Gemini (SDK google-genai)
 try:
     client = genai.Client(api_key=api_key)
     MODEL_ID = "gemini-3-flash-preview"
@@ -130,13 +69,12 @@ knowledge_records = KB_DATA.get("knowledge", [])
 kb_text = "\n".join([f"- [{item.get('category')}] {item.get('fact')}" for item in knowledge_records])
 
 base_system_prompt = (
-    "Tu es l'assistant virtuel de l'Hôpital Universitaire International Mohammed VI (HUIM6). "
+    "Tu es l'assistant virtuel de l'espace de coworking Wavestart. "
     "Réponds en français clair, de manière courtoise, concise et honnête sur l'incertitude. "
     "Règles et limites strictes à respecter obligatoirement :\n"
-    "1. Utilise UNIQUEMENT les faits de la base de connaissances fournie ci-dessous. N'invente aucun fait, prix, horaire ou disponibilité.\n"
-    "2. Si une information est absente de la base, dis-le clairement et oriente vers les canaux officiels ou un humain.\n"
-    "3. INTERDICTION ABSOLUE de fournir des conseils cliniques, diagnostics, prescriptions, dosages ou interprétations de résultats médicaux. En cas d'urgence, conseille de contacter immédiatement les services d'urgence.\n"
-    "4. Ne collecte aucune donnée de santé personnelle.\n\n"
+    "1. Utilise UNIQUEMENT les faits de la base de connaissances fournie ci-dessous. N'invente aucun tarif, horaire ou service.\n"
+    "2. Si une information est absente de la base, dis-le clairement et oriente vers l'accueil.\n"
+    "3. Ne demande jamais de données bancaires ou sensibles.\n\n"
     f"Base de connaissances de référence :\n{kb_text}"
 )
 
