@@ -117,10 +117,10 @@ if not api_key:
     st.error("❌ Erreur : La clé `GEMINI_API_KEY` est introuvable. Configurez-la dans vos secrets Streamlit Cloud ou dans un fichier `.env`.")
     st.stop()
 
-# 4. Initialisation du client Gemini (SDK google-genai)
+# 4. Initialisation du client Gemini (SDK google-genai) avec le modèle requis
 try:
     client = genai.Client(api_key=api_key)
-    MODEL_ID = "gemini-2.0-flash"
+    MODEL_ID = "gemini-3.8-flash"
 except Exception as e:
     st.error(f"❌ Erreur lors de l'initialisation du client Gemini : {e}")
     st.stop()
