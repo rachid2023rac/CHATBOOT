@@ -120,7 +120,8 @@ if not api_key:
 # 4. Initialisation du client Gemini (SDK google-genai)
 try:
     client = genai.Client(api_key=api_key)
-    MODEL_ID = "gemini-2.5-flash"
+ #   MODEL_ID = "gemini-2.5-flash"
+ MODEL_ID = "gemini-3.8-flash"
 except Exception as e:
     st.error(f"❌ Erreur lors de l'initialisation du client Gemini : {e}")
     st.stop()
