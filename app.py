@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai.errors import APIError
 
+
 # Charger les variables d'environnement depuis .env (en local)
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
