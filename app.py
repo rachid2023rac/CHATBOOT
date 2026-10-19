@@ -5,9 +5,16 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai.errors import APIError
 
-# Charger les variables d'environnement depuis .env
+# Charger les variables d'environnement depuis .env (en local)
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
+
+# Si la clé n'est pas trouvée localement, on essaie de la récupérer depuis les secrets Streamlit Cloud
+if not api_key:
+    try:
+        api_key = st.secrets.get("GEMINI_API_KEY")
+    except Exception:
+        pass
 
 # Configuration de la page Streamlit
 st.set_page_config(
@@ -44,7 +51,7 @@ kb_data = load_knowledge_base()
 
 # Gestion des erreurs : Vérification de la clé API et du fichier JSON
 if not api_key:
-    st.error("❌ Erreur : La clé `GEMINI_API_KEY` est introuvable dans le fichier `.env` ou l'environnement.")
+    st.error("❌ Erreur : La clé `GEMINI_API_KEY` est introuvable. Configurez-la dans vos secrets Streamlit Cloud ou dans un fichier `.env`.")
     st.stop()
 
 if kb_data is None:
@@ -54,7 +61,6 @@ if kb_data is None:
 # Initialisation du client Gemini (SDK google-genai)
 try:
     client = genai.Client(api_key=api_key)
-    # Modèle recommandé pour les textes
     MODEL_ID = "gemini-2.5-flash"
 except Exception as e:
     st.error(f"❌ Erreur lors de l'initialisation du client Gemini : {e}")
@@ -64,7 +70,6 @@ except Exception as e:
 system_instructions_list = kb_data.get("system_instructions", [])
 knowledge_records = kb_data.get("knowledge", [])
 
-# Conversion propre de la base de connaissances en texte contextuel pour le modèle
 kb_text = "\n".join([f"- [{item.get('category')}] {item.get('fact')}" for item in knowledge_records])
 
 base_system_prompt = (
@@ -94,15 +99,11 @@ for message in st.session_state.messages:
 
 # 4. Saisie utilisateur et interaction avec l'API Gemini
 if user_prompt := st.chat_input("Écrivez votre question ici..."):
-    # Ajout du message utilisateur à l'historique de session
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     with st.chat_message("user"):
         st.markdown(user_prompt)
 
-    # Construction de l'historique complet pour maintenir le contexte avec Gemini
     contents_history = []
-    
-    # On intègre les tours précédents stockés dans st.session_state
     for msg in st.session_state.messages:
         role = "user" if msg["role"] == "user" else "model"
         contents_history.append({
@@ -110,7 +111,6 @@ if user_prompt := st.chat_input("Écrivez votre question ici..."):
             "parts": [{"text": msg["content"]}]
         })
 
-    # Appel à l'API Gemini avec indicateur de chargement
     with st.chat_message("assistant"):
         with st.spinner("Recherche des informations et génération de la réponse..."):
             try:
@@ -119,7 +119,7 @@ if user_prompt := st.chat_input("Écrivez votre question ici..."):
                     contents=contents_history,
                     config={
                         "system_instruction": base_system_prompt,
-                        "temperature": 0.2, # Température basse pour privilégier la fidélité aux faits
+                        "temperature": 0.2,
                     }
                 )
                 assistant_response = response.text
@@ -130,5 +130,4 @@ if user_prompt := st.chat_input("Écrivez votre question ici..."):
             
             st.markdown(assistant_response)
     
-    # Enregistrement de la réponse du modèle dans l'historique de session
     st.session_state.messages.append({"role": "assistant", "content": assistant_response})
